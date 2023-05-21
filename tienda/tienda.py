@@ -22,6 +22,7 @@ def comprar_billete():
     # Verificar si existen plazas libres
     response_plazas = requests.get(PLAZAS_API_URL)
     plazas_estado = response_plazas.json()
+    #print(plazas_estado)
     plazas_libres = [numero for numero, estado in plazas_estado.items() if estado['estado'] == 'libre']
     if not plazas_libres:
         return jsonify({'mensaje': 'No hay plazas libres disponibles.'}), 400
