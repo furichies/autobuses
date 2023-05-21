@@ -96,4 +96,4 @@ if __name__ == '__main__':
         crear_asientos_iniciales()
 
     # Iniciar la aplicación Flask
-    app.run(host='0.0.0.0', port=7000, debug=True)
+    app.run(host='0.0.0.0', port=7000)
