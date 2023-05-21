@@ -21,12 +21,15 @@ class Asiento(db.Model):
 
 # Crear los asientos iniciales
 def crear_asientos_iniciales():
-    for numero_asiento in range(1, 45):
-        # Verificar si el asiento ya existe
-        if Asiento.query.filter_by(numero=numero_asiento).first() is None:
-            asiento = Asiento(numero_asiento)
-            db.session.add(asiento)
-    db.session.commit()
+    with app.app_context():  # Establecer el contexto de la aplicación
+        db.create_all()
+        
+        for numero_asiento in range(1, 45):
+            # Verificar si el asiento ya existe
+            if Asiento.query.filter_by(numero=numero_asiento).first() is None:
+                asiento = Asiento(numero_asiento)
+                db.session.add(asiento)
+        db.session.commit()
 
 # Definición del recurso para obtener el estado de los asientos
 class EstadoAsientos(Resource):
@@ -88,12 +91,7 @@ api.add_resource(OcuparAsiento, '/asientos/ocupar')
 api.add_resource(DesocuparAsiento, '/asientos/desocupar')
 
 if __name__ == '__main__':
-    with app.app_context():
-        # Crear la base de datos y definir los modelos
-        db.create_all()
-
-        # Crear los asientos iniciales
-        crear_asientos_iniciales()
-
+    crear_asientos_iniciales()  # Crear los asientos iniciales al iniciar la aplicación
+    
     # Iniciar la aplicación Flask
     app.run(host='0.0.0.0', port=7000)
